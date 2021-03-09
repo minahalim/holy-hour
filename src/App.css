@@ -1,0 +1,45 @@
+.main {
+  height: 100%;
+  width: 100%;
+  display: table;
+}
+
+.wrapper {
+  display: table-cell;
+  height: 100%;
+  vertical-align: middle;
+}
+
+.start-button {
+  border-radius: 50%;
+  width: 200px;
+  height: 200px;
+  line-height: 200px;
+  cursor: pointer;
+  color: white;
+  background-color: #ef643b;
+  outline: none;
+  border: none;
+  opacity: 0.9;
+  text-align: center;
+  display: inline-block;
+}
+
+.start-button:hover {
+  opacity: 1;
+}
+
+.heart {
+  animation: beat 5s infinite alternate;
+}
+
+/* Heart beat animation */
+@keyframes beat {
+  to {
+    transform: scale(1.5);
+  }
+}
+
+.timer {
+  opacity: 0.5;
+}
