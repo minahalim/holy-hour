@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import ReactMomentCountDown from "react-moment-countdown";
 
 import "./App.css";
+import logo from './logo.png';
+import bottomLogo from './logo1.png';
 
 const screens = [
   {
@@ -55,6 +57,8 @@ function App() {
   return (
     <div className="main">
       <div className="wrapper">
+        <img src={logo} alt="" className="logo" />
+        <img src={bottomLogo} alt="" className="logo-bottom" />
         {(allDone && "Holy Hour Completed!") || <>{(started && (
           <>
             <div className="heart">

@@ -2,12 +2,31 @@
   height: 100%;
   width: 100%;
   display: table;
+  position: relative;
 }
 
 .wrapper {
   display: table-cell;
   height: 100%;
   vertical-align: middle;
+}
+
+.logo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 30px;
+}
+
+.logo-bottom {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  height: 100px;
+}
+
+.timer {
+  opacity: 0.5;
 }
 
 .start-button {
@@ -38,8 +57,4 @@
   to {
     transform: scale(1.5);
   }
-}
-
-.timer {
-  opacity: 0.5;
 }
