@@ -11,7 +11,7 @@ audio.src = churchBellAudio;
 const screens = [
   {
     title: "Opening Prayer",
-    duration: 10,
+    duration: 300,
   },
   {
     title: "Spiritual Reading",
