@@ -50,8 +50,11 @@ function App() {
   const [currentDuration, setCurrentDuration] = useState(
     screens[currentScreen].duration
   );
+  const [isMenuActive, setIsMenuActive] = useState(false);
 
   const handleOnStart = () => {
+    clearInterval(interval.current);
+
     setIsStarted(true);
     setIsPlaying(true);
 
@@ -94,12 +97,36 @@ function App() {
       <div className="wrapper">
         <img src={logo} alt="" className="logo" />
         <img src={bottomLogo} alt="" className="logo-bottom" />
+        <div class="menu-icon-wrapper" onClick={() => setIsMenuActive(true)}>
+          <div className="menu-icon" />
+          <div className="menu-icon" />
+          <div className="menu-icon" />
+        </div>
+        <ul className={`menu ${isMenuActive && "menu-active"}`}>
+          {screens.map((screen, index) => (
+            <li
+              key={screen.title}
+              className={`menu-item ${
+                (index === currentScreen && "active") || null
+              }`}
+              onClick={() => {
+                setCurrentScreen(index);
+                setCurrentDuration(screen.duration);
+                handleOnStart();
+                setIsMenuActive(false);
+              }}
+            >
+              {screen.title}
+            </li>
+          ))}
+        </ul>
         {
           <>
             {isComplete ? (
               <>
                 Holy Hour Completed!
-                <br /><br />
+                <br />
+                <br />
                 <div className="description">
                   Close by asking Our Lady and your chosen saints to intercede
                   for you throughout the day, just as you would ask your
@@ -119,7 +146,9 @@ function App() {
                     <br />
                     <div className="heart">{screens[currentScreen].title}</div>
                     <br />
-                    <div className="description">{screens[currentScreen].description}</div>
+                    <div className="description">
+                      {screens[currentScreen].description}
+                    </div>
                   </>
                 )}
               </div>
