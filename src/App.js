@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 import "./App.css";
 import logo from "./logo.png";
@@ -33,35 +33,31 @@ const screens = [
 
 function App() {
   const interval = useRef(null);
-  const [currentTime, setCurrentTime] = useState(screens[0].duration);
-  const [isPlaying, setIsPlaying] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const [currentScreen, setCurrentScreen] = useState(0);
+  const [currentDuration, setCurrentDuration] = useState(
+    screens[currentScreen].duration
+  );
 
   const handleOnStart = () => {
     setIsStarted(true);
-    clearInterval(interval.current);
-
     setIsPlaying(true);
 
+    const playPromise = audio.play();
+
+    if (playPromise !== undefined) {
+      playPromise.then(() => {}).catch((error) => {});
+    }
+
     interval.current = setInterval(() => {
-      setCurrentTime((prevTime) => {
-        const newTime = prevTime - 1;
-        
-        if (newTime > 0) {
-          return newTime;
-        } else {
-          handleOnCountdownEnd();
-          return null;
-        }
-      });
+      setCurrentDuration((prevDuration) => prevDuration - 1);
     }, 1000);
   };
 
   const handleonPlayPause = () => {
     clearInterval(interval.current);
-
     setIsPlaying(!isPlaying);
 
     if (!isPlaying) {
@@ -69,25 +65,19 @@ function App() {
     }
   };
 
-  const handleOnCountdownEnd = () => {
-    clearInterval(interval.current);
-
-    const nextScreen = currentScreen + 1;
-
-    setCurrentScreen(nextScreen);
-    setCurrentTime(screens[nextScreen].duration);
-    handleOnStart();
-
-    if (nextScreen <= screens.length - 1) {
-      const playPromise = audio.play();
-
-      if (playPromise !== undefined) {
-        playPromise.then(() => {}).catch((error) => {});
+  useEffect(() => {
+    if (currentDuration === 0) {
+      clearInterval(interval.current);
+      const newScreen = currentScreen + 1;
+      if (newScreen <= screens.length - 1) {
+        setCurrentScreen(newScreen);
+        setCurrentDuration(screens[newScreen].duration);
+        handleOnStart();
+      } else {
+        setIsComplete(true);
       }
-    } else {
-      setIsComplete(true);
     }
-  };
+  }, [currentDuration, currentScreen]);
 
   return (
     <div className="main">
@@ -106,7 +96,9 @@ function App() {
                     <br />
                     <div className="timer">
                       {!isPlaying && <span className="play" />}
-                      {new Date(currentTime * 1000).toISOString().substr(11, 8)}
+                      {new Date(currentDuration * 1000)
+                        .toISOString()
+                        .substr(11, 8)}
                     </div>
                   </>
                 )}
