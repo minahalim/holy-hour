@@ -12,22 +12,32 @@ const screens = [
   {
     title: "Opening Prayer",
     duration: 300,
+    description:
+      "This is a time of verbal prayer before the Lord, giving him praise and asking his mercy.",
   },
   {
     title: "Spiritual Reading",
     duration: 900,
+    description:
+      "This will likely consist of your daily Exodus 90 reflection (Daily Bearings, Scripture, and Reflection)",
   },
   {
     title: "Silent Prayer",
     duration: 1200,
+    description:
+      "This is set aside time to dialogue with the Lord. Bring before him whatever is on your mind and heart. This will often be fueled by questions from the day’s reflection. Honestly share with the Lord your thoughts and concerns. Then, and most importantly, give the Lord the space to respond and yourself the silence to listen.",
   },
   {
     title: "Intercession",
     duration: 900,
+    description:
+      "Pray for your own deliverance, for your family, your fraternity, the Church, and any other prayers you may have.",
   },
   {
     title: "Thanksgiving",
     duration: 300,
+    description:
+      "We have much to be thankful for each day. Consistent acknowledgment of God’s gifts and graces brings a greater sense of appreciation and joy into life. Make a prayer of praise and thanksgiving before the Lord.",
   },
 ];
 
@@ -87,19 +97,29 @@ function App() {
         {
           <>
             {isComplete ? (
-              "Holy Hour Completed!"
+              <>
+                Holy Hour Completed!
+                <br /><br />
+                <div className="description">
+                  Close by asking Our Lady and your chosen saints to intercede
+                  for you throughout the day, just as you would ask your
+                  brothers to pray for you.
+                </div>
+              </>
             ) : (
               <div className="timer-wrapper" onClick={handleonPlayPause}>
                 {isStarted && (
                   <>
-                    <div className="heart">{screens[currentScreen].title}</div>
-                    <br />
                     <div className="timer">
                       {!isPlaying && <span className="play" />}
                       {new Date(currentDuration * 1000)
                         .toISOString()
                         .substr(11, 8)}
                     </div>
+                    <br />
+                    <div className="heart">{screens[currentScreen].title}</div>
+                    <br />
+                    <div className="description">{screens[currentScreen].description}</div>
                   </>
                 )}
               </div>
