@@ -1,56 +1,91 @@
-import moment from "moment";
-import React, { useState } from "react";
-import ReactMomentCountDown from "react-moment-countdown";
+import React, { useState, useRef } from "react";
 
 import "./App.css";
-import logo from './logo.png';
-import bottomLogo from './logo1.png';
+import logo from "./logo.png";
+import bottomLogo from "./logo1.png";
+import churchBellAudio from "./church-bell.ogg";
+
+const audio = new Audio();
+audio.src = churchBellAudio;
 
 const screens = [
   {
     title: "Opening Prayer",
-    duration: "5 minutes",
+    duration: 10,
   },
   {
     title: "Spiritual Reading",
-    duration: "15 minutes",
+    duration: 900,
   },
   {
     title: "Silent Prayer",
-    duration: "20 minutes",
+    duration: 1200,
   },
   {
     title: "Intercession",
-    duration: "15 minutes",
+    duration: 900,
   },
   {
     title: "Thanksgiving",
-    duration: "5 minutes",
+    duration: 300,
   },
 ];
 
 function App() {
+  const interval = useRef(null);
+  const [currentTime, setCurrentTime] = useState(screens[0].duration);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isStarted, setIsStarted] = useState(false);
+  const [isComplete, setIsComplete] = useState(false);
   const [currentScreen, setCurrentScreen] = useState(0);
-  const [started, setStarted] = useState(0);
-  const [allDone, setAllDone] = useState(0);
 
-  const start = (screen = 0) => {
-    const duration = moment().clone();
-    const newTime = screens[screen].duration.split(" ");
+  const handleOnStart = () => {
+    setIsStarted(true);
+    clearInterval(interval.current);
 
-    setStarted(
-      duration.add(+newTime[0], newTime[1]).format("YYYY-MM-DD HH:mm:ss")
-    );
+    setIsPlaying(true);
+
+    interval.current = setInterval(() => {
+      setCurrentTime((prevTime) => {
+        const newTime = prevTime - 1;
+        
+        if (newTime > 0) {
+          return newTime;
+        } else {
+          handleOnCountdownEnd();
+          return null;
+        }
+      });
+    }, 1000);
+  };
+
+  const handleonPlayPause = () => {
+    clearInterval(interval.current);
+
+    setIsPlaying(!isPlaying);
+
+    if (!isPlaying) {
+      handleOnStart();
+    }
   };
 
   const handleOnCountdownEnd = () => {
+    clearInterval(interval.current);
+
     const nextScreen = currentScreen + 1;
+
+    setCurrentScreen(nextScreen);
+    setCurrentTime(screens[nextScreen].duration);
+    handleOnStart();
+
     if (nextScreen <= screens.length - 1) {
-      setCurrentScreen(nextScreen);
-      setStarted(0);
-      start(nextScreen);
+      const playPromise = audio.play();
+
+      if (playPromise !== undefined) {
+        playPromise.then(() => {}).catch((error) => {});
+      }
     } else {
-      setAllDone(1);
+      setIsComplete(true);
     }
   };
 
@@ -59,28 +94,31 @@ function App() {
       <div className="wrapper">
         <img src={logo} alt="" className="logo" />
         <img src={bottomLogo} alt="" className="logo-bottom" />
-        {(allDone && "Holy Hour Completed!") || <>{(started && (
+        {
           <>
-            <div className="heart">
-              {screens[currentScreen].title}
-            </div>
-            <br />
-            <div className="timer">
-            <ReactMomentCountDown
-              toDate={started}
-              onCountdownEnd={handleOnCountdownEnd}
-              sourceFormatMask="YYYY-MM-DD HH:mm:ss"
-            />
-            </div>
+            {isComplete ? (
+              "Holy Hour Completed!"
+            ) : (
+              <div className="timer-wrapper" onClick={handleonPlayPause}>
+                {isStarted && (
+                  <>
+                    <div className="heart">{screens[currentScreen].title}</div>
+                    <br />
+                    <div className="timer">
+                      {!isPlaying && <span className="play" />}
+                      {new Date(currentTime * 1000).toISOString().substr(11, 8)}
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
+            {!isStarted && (
+              <div className="start-button" onClick={handleOnStart}>
+                Start
+              </div>
+            )}
           </>
-        )) ||
-          null}
-        <br />
-        {started === 0 && (
-          <div className="start-button" onClick={() => start(0)}>
-            Start
-          </div>
-        )}</>}
+        }
       </div>
     </div>
   );

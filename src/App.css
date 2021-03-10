@@ -25,8 +25,21 @@
   height: 100px;
 }
 
+.timer-wrapper {
+  cursor: pointer;
+}
+
 .timer {
   opacity: 0.5;
+}
+
+.play {
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 20px solid #ef643b;
+  height: 0px;
+  display: inline-block;
+  margin-right: 15px;
 }
 
 .start-button {
