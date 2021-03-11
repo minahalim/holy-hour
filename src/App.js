@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import NoSleep from 'nosleep.js';
+import NoSleep from "nosleep.js";
 
 import "./App.css";
 import logo from "./logo.png";
@@ -44,6 +44,7 @@ const screens = [
 
 function App() {
   const interval = useRef(null);
+  const wrapperRef = useRef(null);
   const [isStarted, setIsStarted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
@@ -93,37 +94,55 @@ function App() {
     }
   }, [currentDuration, currentScreen]);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+        setIsMenuActive(false);
+      }
+    };
+    // Bind the event listener
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [wrapperRef]);
+
   return (
     <div className="main">
       <div className="wrapper">
         <img src={logo} alt="" className="logo" />
         <img src={bottomLogo} alt="" className="logo-bottom" />
-        <div
-          className="menu-icon-wrapper"
-          onClick={() => setIsMenuActive(true)}
-        >
-          <div className="menu-icon" />
-          <div className="menu-icon" />
-          <div className="menu-icon" />
-        </div>
-        <ul className={`menu ${isMenuActive && "menu-active"}`}>
-          {screens.map((screen, index) => (
-            <li
-              key={screen.title}
-              className={`menu-item ${
-                (index === currentScreen && "active") || null
-              }`}
-              onClick={() => {
-                setCurrentScreen(index);
-                setCurrentDuration(screen.duration);
-                handleOnStart();
-                setIsMenuActive(false);
-              }}
+        {isStarted && (
+          <div ref={wrapperRef}>
+            <div
+              className="menu-icon-wrapper"
+              onClick={() => setIsMenuActive(true)}
             >
-              {screen.title}
-            </li>
-          ))}
-        </ul>
+              <div className="menu-icon" />
+              <div className="menu-icon" />
+              <div className="menu-icon" />
+            </div>
+            <ul className={`menu ${isMenuActive && "menu-active"}`}>
+              {screens.map((screen, index) => (
+                <li
+                  key={screen.title}
+                  className={`menu-item ${
+                    (index === currentScreen && "active") || null
+                  }`}
+                  onClick={() => {
+                    setCurrentScreen(index);
+                    setCurrentDuration(screen.duration);
+                    handleOnStart();
+                    setIsMenuActive(false);
+                  }}
+                >
+                  {screen.title}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
         {
           <>
             {isComplete ? (
@@ -141,22 +160,37 @@ function App() {
               <div className="timer-wrapper" onClick={handleonPlayPause}>
                 {isStarted && (
                   <>
-                    <div className={isPlaying ? "heart" : ""}>
-                      {screens[currentScreen].title}
-                    </div>
-                    <br />
-                    {!isPlaying && <span className="play heart" />}
-                    <div className="timer">
-                      {new Date(currentDuration * 1000)
-                        .toISOString()
-                        .substr(11, 8)}
-                    </div>
-                    {!isPlaying && <span className="play heart" />}
-                    <br />
-                    <br />
-                    <div className="description">
-                      {screens[currentScreen].description}
-                    </div>
+                    {!isPlaying && (
+                      <div
+                        className="start-button"
+                        onClick={() => {
+                          const noSleep = new NoSleep();
+
+                          noSleep.enable();
+                          handleOnStart();
+                        }}
+                      >
+                        Continue
+                      </div>
+                    )}
+                    {isPlaying && (
+                      <>
+                        <div className={isPlaying ? "heart" : ""}>
+                          {screens[currentScreen].title}
+                        </div>
+                        <br />
+                        <div className="timer">
+                          {new Date(currentDuration * 1000)
+                            .toISOString()
+                            .substr(11, 8)}
+                        </div>
+                        <br />
+                        <br />
+                        <div className="description">
+                          {screens[currentScreen].description}
+                        </div>
+                      </>
+                    )}
                   </>
                 )}
               </div>
