@@ -97,7 +97,7 @@ function App() {
       <div className="wrapper">
         <img src={logo} alt="" className="logo" />
         <img src={bottomLogo} alt="" className="logo-bottom" />
-        <div class="menu-icon-wrapper" onClick={() => setIsMenuActive(true)}>
+        <div className="menu-icon-wrapper" onClick={() => setIsMenuActive(true)}>
           <div className="menu-icon" />
           <div className="menu-icon" />
           <div className="menu-icon" />
