@@ -53,9 +53,9 @@
 
 .start-button {
   border-radius: 50%;
-  width: 150px;
-  height: 150px;
-  line-height: 150px;
+  width: 200px;
+  height: 200px;
+  line-height: 200px;
   cursor: pointer;
   color: white;
   background-color: #ef643b;
