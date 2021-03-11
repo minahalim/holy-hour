@@ -97,7 +97,10 @@ function App() {
       <div className="wrapper">
         <img src={logo} alt="" className="logo" />
         <img src={bottomLogo} alt="" className="logo-bottom" />
-        <div className="menu-icon-wrapper" onClick={() => setIsMenuActive(true)}>
+        <div
+          className="menu-icon-wrapper"
+          onClick={() => setIsMenuActive(true)}
+        >
           <div className="menu-icon" />
           <div className="menu-icon" />
           <div className="menu-icon" />
@@ -137,15 +140,18 @@ function App() {
               <div className="timer-wrapper" onClick={handleonPlayPause}>
                 {isStarted && (
                   <>
+                    <div className={isPlaying ? "heart" : ""}>
+                      {screens[currentScreen].title}
+                    </div>
+                    <br />
+                    {!isPlaying && <span className="play heart" />}
                     <div className="timer">
-                      {!isPlaying && <span className="play" />}
                       {new Date(currentDuration * 1000)
                         .toISOString()
                         .substr(11, 8)}
                     </div>
-                    <br />
-                    <div className="heart">{screens[currentScreen].title}</div>
-                    <br />
+                    {!isPlaying && <span className="play heart" />}
+                    <br /><br />
                     <div className="description">
                       {screens[currentScreen].description}
                     </div>

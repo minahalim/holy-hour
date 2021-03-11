@@ -15,9 +15,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background: black;
   color: #ef643b;
-  font-size: 3vh;
   font-weight: bold;
   font-family: "Open Sans Condensed", sans-serif;
   text-align: center;
   line-height: 100%;
+  font-size: calc(14px + (34 - 14) * ((100vw - 300px) / (1600 - 300)));
 }

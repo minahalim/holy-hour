@@ -30,23 +30,24 @@
 }
 
 .timer {
-  opacity: 0.5;
+  /* opacity: 0.5; */
+  margin: auto 20px;
+  display: inline-block;
 }
 
 .description {
-  font-size: 2.5vh;
-  width: 50%;
+  width: 60%;
   text-align: center;
   margin: auto;
 }
 
 .play {
-  border-top: 10px solid transparent;
-  border-bottom: 10px solid transparent;
-  border-left: 20px solid #ef643b;
-  height: 0px;
+  border-left: 5px solid red;
+  border-right: 5px solid red;
+  height: 20px;
+  width: 5px;
   display: inline-block;
-  margin-right: 15px;
+  vertical-align: bottom;
 }
 
 .start-button {
@@ -80,9 +81,9 @@
 }
 
 .menu {
-  width: 250px;
+  width: 50vw;
   position: absolute;
-  left: -250px;
+  left: -50vw;
   top: 0;
   height: 100%;
   background-color: #271a0ed1;
@@ -102,8 +103,8 @@
   margin: 0;
   padding: 0;
   margin: 10px auto;
-  height: 30px;
-  line-height: 30px;
+  height: 50px;
+  line-height: 50px;
   text-align: left;
   padding-left: 15px;
   cursor: pointer;

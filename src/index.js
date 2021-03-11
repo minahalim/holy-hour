@@ -11,14 +11,17 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-// Function that attempts to request a screen wake lock.
 const requestWakeLock = async () => {
   try {
-    await navigator.wakeLock.request();
+
+    await navigator.wakeLock.request('screen');
+
   } catch (err) {
-    console.error(`${err.name}, ${err.message}`);
+    // The wake lock request fails - usually system-related, such as low battery.
+
+    console.log(`${err.name}, ${err.message}`);
   }
-};
+}
 
 requestWakeLock();
 
