@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import NoSleep from 'nosleep.js';
 
 import "./App.css";
 import logo from "./logo.png";
@@ -151,7 +152,8 @@ function App() {
                         .substr(11, 8)}
                     </div>
                     {!isPlaying && <span className="play heart" />}
-                    <br /><br />
+                    <br />
+                    <br />
                     <div className="description">
                       {screens[currentScreen].description}
                     </div>
@@ -160,7 +162,15 @@ function App() {
               </div>
             )}
             {!isStarted && (
-              <div className="start-button" onClick={handleOnStart}>
+              <div
+                className="start-button"
+                onClick={() => {
+                  const noSleep = new NoSleep();
+
+                  noSleep.enable();
+                  handleOnStart();
+                }}
+              >
                 Start
               </div>
             )}
